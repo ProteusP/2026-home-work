@@ -1,6 +1,8 @@
 package company.vk.edu.distrib.compute.nihuaway00;
 
 import company.vk.edu.distrib.compute.Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +11,7 @@ import java.nio.file.Path;
 import java.util.NoSuchElementException;
 
 public class EntityDao implements Dao<byte[]> {
+    private static final Logger log = LoggerFactory.getLogger(EntityDao.class);
     private final Path baseDir;
 
     public EntityDao(Path baseDir) throws IOException {
@@ -57,7 +60,9 @@ public class EntityDao implements Dao<byte[]> {
         try {
             Files.delete(baseDir.resolve(key));
         } catch (NoSuchFileException e) {
-            // если файла нет, все итак ок
+            if (log.isWarnEnabled()) {
+                log.warn("Entity is not found in storage. Nothing to delete", e);
+            }
         }
     }
 

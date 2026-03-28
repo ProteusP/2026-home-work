@@ -10,6 +10,7 @@ public final class QueryUtils {
     }
 
     public static Map<String, String> parse(String query) {
+        int partsInEntry = 2;
         if (query == null || query.isBlank()) {
             return Map.of();
         }
@@ -17,7 +18,7 @@ public final class QueryUtils {
         Map<String, String> result = new ConcurrentHashMap<>();
         for (String param : query.split("&")) {
             String[] entry = param.split("=");
-            if (entry.length > 1) {
+            if (entry.length == partsInEntry) {
                 result.put(
                         URLDecoder.decode(entry[0], StandardCharsets.UTF_8),
                         URLDecoder.decode(entry[1], StandardCharsets.UTF_8)

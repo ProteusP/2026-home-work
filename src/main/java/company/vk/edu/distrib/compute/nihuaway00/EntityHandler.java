@@ -49,7 +49,7 @@ public class EntityHandler implements HttpHandler {
             exchange.sendResponseHeaders(200, data.length);
             OutputStream os = exchange.getResponseBody();
             os.write(data);
-
+            os.close();
         } catch (NoSuchElementException err) {
             exchange.sendResponseHeaders(404, 0);
         } catch (IllegalArgumentException err) {

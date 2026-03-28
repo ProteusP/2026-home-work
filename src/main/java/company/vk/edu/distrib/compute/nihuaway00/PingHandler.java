@@ -22,11 +22,13 @@ public class PingHandler implements HttpHandler {
             exchange.sendResponseHeaders(200, 0);
             OutputStream os = exchange.getResponseBody();
             os.write("{\"status\": \"ok\"}".getBytes());
+            os.close();
             exchange.close();
         } else {
             exchange.sendResponseHeaders(503, 0);
             OutputStream os = exchange.getResponseBody();
             os.write("{\"status\": \"not available\", \"desc\":\"entity dao not available\"}".getBytes());
+            os.close();
             exchange.close();
         }
 
