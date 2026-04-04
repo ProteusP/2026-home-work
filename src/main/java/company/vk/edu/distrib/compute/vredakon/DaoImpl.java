@@ -6,10 +6,18 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import company.vk.edu.distrib.compute.Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DaoImpl implements Dao<byte[]> {
 
+    private final Logger log = LoggerFactory.getLogger("InMemoryDao");
     private final Map<String, byte[]> data = new ConcurrentHashMap<>();
+    private boolean isClosed;
+
+    public DaoImpl() {
+        this.isClosed = false;
+    }
 
     @Override
     public byte[] get(String key) throws NoSuchElementException, IllegalArgumentException {
@@ -28,6 +36,11 @@ public class DaoImpl implements Dao<byte[]> {
 
     @Override
     public void close() throws IOException {
-        throw new IOException("Closed");
+        if (!isClosed) {
+            data.clear();
+            isClosed = true;
+            return;
+        }
+        log.error("Resource is already closed");
     }
 }
