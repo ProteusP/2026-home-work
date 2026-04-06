@@ -78,9 +78,9 @@ public class NesterukiaFileSystemKVDao implements Dao<byte[]> {
         lock.writeLock().lock();
         try {
             Files.deleteIfExists(file);
+            keyLocks.remove(key);
         } finally {
             lock.writeLock().unlock();
-            keyLocks.remove(key);
         }
     }
 
