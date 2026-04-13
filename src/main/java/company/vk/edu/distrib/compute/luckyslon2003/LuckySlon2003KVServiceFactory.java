@@ -15,6 +15,6 @@ public class LuckySlon2003KVServiceFactory extends KVServiceFactory {
     }
 
     protected Path dataDirectory() {
-        return Path.of("data");
+        return Path.of(System.getProperty("java.io.tmpdir"), "luckyslon2003-data");
     }
 }
