@@ -19,21 +19,23 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ProteuspKVService implements KVService {
 
-    private static final String METHOD_GET = "GET";
-    private static final String METHOD_PUT = "PUT";
-    private static final String METHOD_DELETE = "DELETE";
-    private static final String PARAM_ID = "id";
+    protected static final String METHOD_GET = "GET";
+    protected static final String METHOD_PUT = "PUT";
+    protected static final String METHOD_DELETE = "DELETE";
+    protected static final String PARAM_ID = "id";
 
-    private final ReentrantLock lock = new ReentrantLock();
+    protected final ReentrantLock lock = new ReentrantLock();
 
-    private final ExecutorService executor;
-    private final HttpServer server;
-    private boolean running;
-    private Dao<byte[]> dao;
+    protected final ExecutorService executor;
+    protected HttpServer server;
+    protected boolean running;
+    protected Dao<byte[]> dao;
+    protected Integer port;
 
     public ProteuspKVService(int port, Dao<byte[]> dao) {
         this.executor = Executors.newCachedThreadPool();
         this.dao = dao;
+        this.port = port;
         try {
             this.server = HttpServer.create(new InetSocketAddress(port), 0);
         } catch (IOException e) {
@@ -50,7 +52,7 @@ public class ProteuspKVService implements KVService {
         this(port, new ProteusPFSDao(KVService.class));
     }
 
-    private HttpHandler handleErrors(HttpHandler handler) {
+    HttpHandler handleErrors(HttpHandler handler) {
         return exchange -> {
             try (exchange) {
                 try {
@@ -66,7 +68,7 @@ public class ProteuspKVService implements KVService {
     };
     }
 
-    private void handleStatus(HttpExchange exchange) throws IOException {
+    void handleStatus(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
 
         if (!METHOD_GET.equals(method)) {
@@ -76,7 +78,7 @@ public class ProteuspKVService implements KVService {
         exchange.sendResponseHeaders(200, -1);
     }
 
-    private void handleEntity(HttpExchange exchange) throws IOException {
+    protected void handleEntity(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         String query = exchange.getRequestURI().getQuery();
         Map<String, String> params = HttpUtils.parseQueryParams(query);
