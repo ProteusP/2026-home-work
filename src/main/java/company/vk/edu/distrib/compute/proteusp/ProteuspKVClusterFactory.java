@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("java:S1125")
 public class ProteuspKVClusterFactory extends KVClusterFactory {
     @Override
     protected KVCluster doCreate(List<Integer> ports) {

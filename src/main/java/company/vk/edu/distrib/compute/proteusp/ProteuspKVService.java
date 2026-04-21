@@ -52,7 +52,7 @@ public class ProteuspKVService implements KVService {
         this(port, new ProteusPFSDao(KVService.class));
     }
 
-    HttpHandler handleErrors(HttpHandler handler) {
+    static HttpHandler handleErrors(HttpHandler handler) {
         return exchange -> {
             try (exchange) {
                 try {
